@@ -53,7 +53,11 @@ include base.mk
 .DEFAULT_GOAL := commit-push
 #PROJECT := project
 .PHONY: serve
-serve: django-serve-webpack
+#serve: django-serve-webpack
+serve:
+	@echo "Serving http://0.0.0.0:8000"
+	npm run watch &
+	python -m http.server
 
 deploy-prod:
 	aws --profile default s3 sync --exclude "bin/*" --exclude "lib/*" --exclude ".git/*" --exclude ".gitignore" --exclude "Makefile" --exclude "README.rst" . s3://headstraightband.com --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
