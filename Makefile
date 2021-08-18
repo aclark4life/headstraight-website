@@ -68,7 +68,7 @@ deploy-dev:
 
 deploy:
 	$(MAKE) pack
-	$(MAKE) commit-push
+	-$(MAKE) commit-push
 	$(MAKE) deploy-prod
 
 pack:
