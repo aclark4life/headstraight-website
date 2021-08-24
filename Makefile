@@ -51,25 +51,14 @@ include base.mk
 # Here you can override variables, targets, etc.
 #
 .DEFAULT_GOAL := commit-push
-#PROJECT := project
-.PHONY: serve
-#serve: django-serve-webpack
 serve:
 	@echo "Serving http://0.0.0.0:8000"
 	npm run watch &
 	python -m http.server
 
-deploy-prod:
+deploy:
 	aws --profile default s3 sync --exclude "bin/*" --exclude "lib/*" --exclude ".git/*" --exclude ".gitignore" --exclude "Makefile" --exclude "README.rst" --exclude "node_modules/*" . s3://headstraightband.com --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
 	aws cloudfront create-invalidation --distribution-id E1OIVKRQH3OZTA --paths "/*"
 
 deploy-dev:
 	aws --profile default s3 sync --exclude ".git/*" --exclude ".gitignore" --exclude "Makefile" --exclude "README.rst" . s3://dev.headstraightband.com --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
-
-deploy:
-	$(MAKE) pack
-	-$(MAKE) commit-push
-	$(MAKE) deploy-prod
-
-pack:
-	./node_modules/.bin/webpack
