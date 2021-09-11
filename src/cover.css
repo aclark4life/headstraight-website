@@ -18,9 +18,8 @@
  */
 
 
-html, body{
-background-color:#000000; //This sets the background color to black
-color:#0000FF; //This sets the text to blue, so you can read it on webpages set to use defaults; white is too hard on my eyes and if you dont put this it will be black on black
+html:not(:hover), body:not(:hover){
+    background-color:#000000;
 }
 
 /*
