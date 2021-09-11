@@ -17,9 +17,8 @@
  * Base structure
  */
 
-
-html:not(:hover), body:not(:hover){
-    background-color:#000000;
+html, body {
+    background: black;
 }
 
 /*
