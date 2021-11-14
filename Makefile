@@ -57,11 +57,11 @@ serve:
 	@python -m http.server
 
 deploy-prod:
-	aws --profile default s3 sync --delete --exclude base.mk --exclude "bin/*" --exclude "lib/*" --exclude ".git/*" --exclude ".gitignore" --exclude "Makefile" --exclude "README.rst" --exclude "node_modules/*" . s3://headstraightband.com --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+	aws --profile default s3 sync --exclude "webpack.config.js" --exclude "src/*" --exclude "package.json" --exclude "base.mk" --exclude "bin/*" --exclude "lib/*" --exclude ".git/*" --exclude ".gitignore" --exclude "Makefile" --exclude "README.rst" --exclude "node_modules/*" --delete . s3://headstraightband.com --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
 	aws cloudfront create-invalidation --distribution-id E1OIVKRQH3OZTA --paths "/*"
 
 deploy-dev:
-	aws --profile default s3 sync --delete --exclude base.mk --exclude "bin/*" --exclude "lib/*" --exclude ".git/*" --exclude ".gitignore" --exclude "Makefile" --exclude "README.rst" --exclude "node_modules/*" . s3://dev.headstraightband.com --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+	aws --profile default s3 sync --exclude "webpack.config.js" --exclude "src/*" --exclude "package.json" --exclude "base.mk" --exclude "bin/*" --exclude "lib/*" --exclude ".git/*" --exclude ".gitignore" --exclude "Makefile" --exclude "README.rst" --exclude "node_modules/*" --delete . s3://dev.headstraightband.com --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
 
 pack:
 	./node_modules/.bin/webpack
