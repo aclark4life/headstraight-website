@@ -65,3 +65,6 @@ deploy-dev:
 
 pack:
 	./node_modules/.bin/webpack
+
+django-npm-install:
+	npm install
