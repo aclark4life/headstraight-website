@@ -9,7 +9,7 @@
 # License
 # ------------------------------------------------------------------------------ 
 #
-# Copyright 2016—2021 Jeffrey A. Clark
+# Copyright 2016—2021 Jeffrey A. Clark, "Alex"
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -123,45 +123,69 @@
 #
 # - https://www.gnu.org/software/make/manual/html_node/Phony-Targets.html
 #
+
 # Variables
 # ------------------------------------------------------------------------------  
 #
 .DEFAULT_GOAL := usage
-
-MESSAGE := Update
-
-PROJECT := project
-
-# https://stackoverflow.com/a/589260/185820
-TMPDIR := $(shell mktemp -d)
-RANDIR := $(shell openssl rand -base64 12 | sed 's/\///g')
-UNAME := $(shell uname)
-
-# http://unix.stackexchange.com/a/37316
-BRANCHES = `git branch -a | grep remote | grep -v HEAD | grep -v master`
+COMMIT_MESSAGE := Update
+PROJECT_NAME := project
 
 # Rules
 # ------------------------------------------------------------------------------  
 #
-# Beanstalk
+# AWS Elastic Beanstalk
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
 # 
-eb-create-default:
-	eb create $(ENV_NAME) --elb-type $(LB_TYPE) -i $(INSTANCE_TYPE) --vpc --vpc.id $(VPC_ID) --vpc.ec2subnets $(VPC_SUBNET_EC2) --vpc.elbsubnets $(VPC_SUBNET_ELB) --vpc.securitygroups $(VPC_SG) -k $(SSH_KEY)
+
+eb-init-default:
+	eb init
+eb-deploy-default:
+	eb deploy
+eb-create-default: eb-check-env
+	eb create $(ENV_NAME) -p $(PLATFORM) --elb-type $(LB_TYPE) -i $(INSTANCE_TYPE) --vpc --vpc.id $(VPC_ID) --vpc.ec2subnets $(VPC_SUBNET_EC2) --vpc.elbsubnets $(VPC_SUBNET_ELB) --vpc.securitygroups $(VPC_SG) -k $(SSH_KEY) --vpc.elbpublic --vpc.publicip
+
+# https://stackoverflow.com/a/4731504/185820
+eb-check-env:
+ifndef ENV_NAME
+	$(error ENV_NAME is undefined)
+endif
+ifndef LB_TYPE
+	$(error LB_TYPE is undefined)
+endif
+ifndef INSTANCE_TYPE
+	$(error INSTANCE_TYPE is undefined)
+endif
+ifndef VPC_ID
+	$(error VPC_ID is undefined)
+endif
+ifndef VPC_SUBNET_EC2
+	$(error VPC_SUBNET_EC2 is undefined)
+endif
+ifndef VPC_SUBNET_ELB
+	$(error VPC_SUBNET_ELB is undefined)
+endif
+ifndef VPC_SG
+	$(error VPC_SG is undefined)
+endif
+ifndef SSH_KEY
+	$(error SSH_KEY is undefined)
+endif
+
 #
 # Django
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
 #
 django-project:
-	-mkdir -p $(PROJECT)/templates
-	-touch $(PROJECT)/templates/base.html
-	-django-admin startproject $(PROJECT) .
+	-mkdir -p $(PROJECT_NAME)/templates
+	-touch $(PROJECT_NAME)/templates/base.html
+	-django-admin startproject $(PROJECT_NAME) .
 django-init:
 	@$(MAKE) pip-install-django
 	@$(MAKE) pg-init
 	@$(MAKE) django-project
 	export SETTINGS=settings.py; $(MAKE) django-settings
-	git add $(PROJECT)
+	git add $(PROJECT_NAME)
 	git add manage.py
 django-init-hub:
 	git init
@@ -169,7 +193,7 @@ django-init-hub:
 	@$(MAKE) django-init
 	@$(MAKE) make
 	@$(MAKE) readme
-	@$(MAKE) git-ignore
+	@$(MAKE) gitignore
 	@$(MAKE) git-commit
 	@$(MAKE) git-set-upstream
 	@$(MAKE) git-push
@@ -178,7 +202,7 @@ django-migrate-default:
 	python manage.py migrate
 django-migrations-default:
 	python manage.py makemigrations
-	git add $(PROJECT)/migrations/*.py
+	git add $(PROJECT_NAME)/migrations/*.py
 django-serve-default:
 	python manage.py runserver 0.0.0.0:8000
 django-serve-webpack-default:
@@ -197,16 +221,16 @@ django-user-default:
 django-loaddata-default:
 	python manage.py loaddata
 django-graph:
-	python manage.py graph_models $(PROJECT) -o graph_models_$(PROJECT).png
+	python manage.py graph_models $(PROJECT_NAME) -o graph_models_$(PROJECT_NAME).png
 django-settings:
-	echo "\n# $(PROJECT)\n" >> $(PROJECT)/$(SETTINGS)
-	echo "ALLOWED_HOSTS = ['*']\n" >> $(PROJECT)/$(SETTINGS)
-	echo "import dj_database_url" >> $(PROJECT)/$(SETTINGS)
-	echo "DATABASE_URL = os.environ.get('DATABASE_URL', 'postgres://$(DB_USER):$(DB_PASS)@$(DB_HOST):$(DB_PORT)/$(PROJECT)')" >> $(PROJECT)/$(SETTINGS)
-	echo "DATABASES['default'] = dj_database_url.parse(DATABASE_URL)" >> $(PROJECT)/$(SETTINGS)
-	echo "INSTALLED_APPS.append('webpack_loader')" >> $(PROJECT)/$(SETTINGS)
-	echo "STATICFILES_DIRS.append(os.path.join(BASE_DIR, 'frontend/build'))" >> $(PROJECT)/$(SETTINGS)
-	echo "WEBPACK_LOADER = { 'MANIFEST_FILE': os.path.join(BASE_DIR, 'frontend/build/manifest.json'), }" >> $(PROJECT)/$(SETTINGS)
+	echo "\n# $(PROJECT_NAME)\n" >> $(PROJECT_NAME)/$(SETTINGS)
+	echo "ALLOWED_HOSTS = ['*']\n" >> $(PROJECT_NAME)/$(SETTINGS)
+	echo "import dj_database_url" >> $(PROJECT_NAME)/$(SETTINGS)
+	echo "DATABASE_URL = os.environ.get('DATABASE_URL', 'postgres://$(DB_USER):$(DB_PASS)@$(DB_HOST):$(DB_PORT)/$(PROJECT_NAME)')" >> $(PROJECT_NAME)/$(SETTINGS)
+	echo "DATABASES['default'] = dj_database_url.parse(DATABASE_URL)" >> $(PROJECT_NAME)/$(SETTINGS)
+	echo "INSTALLED_APPS.append('webpack_loader')" >> $(PROJECT_NAME)/$(SETTINGS)
+	echo "STATICFILES_DIRS.append(os.path.join(BASE_DIR, 'frontend/build'))" >> $(PROJECT_NAME)/$(SETTINGS)
+	echo "WEBPACK_LOADER = { 'MANIFEST_FILE': os.path.join(BASE_DIR, 'frontend/build/manifest.json'), }" >> $(PROJECT_NAME)/$(SETTINGS)
 django-webpack-init:
 	python manage.py webpack_init
 django-npm-install-default:
@@ -227,8 +251,6 @@ static: django-static
 su: django-su
 .PHONY: user
 user: django-user
-.PHONY: test
-test: django-test
 .PHONY: loaddata
 loaddata: django-loaddata
 .PHONY: npm-install
@@ -237,7 +259,8 @@ npm-install: django-npm-install
 # Git
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
 #
-git-ignore:
+
+gitignore:
 	echo "bin/\nlib/\npyvenv.cfg\n__pycache__" > .gitignore
 	git add .gitignore
 git-branches:
@@ -246,7 +269,7 @@ git-branches:
 git-prune:
 	git remote update origin --prune
 git-commit:
-	git commit -a -m $(MESSAGE)
+	git commit -a -m $(COMMIT_MESSAGE)
 git-commit-edit:
 	git commit -a
 git-push-default:
@@ -267,6 +290,32 @@ p: push
 commit-push: git-commit git-push
 .PHONY: commit-edit
 commit-edit: git-commit-edit git-push
+
+# http://unix.stackexchange.com/a/37316
+BRANCHES = `git branch -a | grep remote | grep -v HEAD | grep -v master`
+
+#
+# Jenkins
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+#
+
+define PIPELINE
+pipeline {
+    agent any
+    stages {
+        stage('') {
+            steps {
+                echo ''
+            }
+        }
+	}
+}
+endef
+
+export PIPELINE
+pipeline:
+	@echo "$$PIPELINE" > Jenkinsfile
+
 #
 # Misc
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
@@ -278,7 +327,7 @@ r: rand
 #
 readme:
 	echo "Creating README.rst"
-	@echo $(PROJECT) > README.rst
+	@echo $(PROJECT_NAME) > README.rst
 	@echo "================================================================================\n" >> README.rst
 	echo "Done."
 	git add README.rst
@@ -286,8 +335,8 @@ readme:
 .PHONY: review
 review:
 ifeq ($(UNAME), Darwin)
-	@open -a $(EDITOR) `find $(PROJECT) -name \*.py | grep -v __init__.py | grep -v migrations`\
-		`find $(PROJECT) -name \*.html` `find $(PROJECT) -name \*.js`
+	@open -a $(EDITOR) `find $(PROJECT_NAME) -name \*.py | grep -v __init__.py | grep -v migrations`\
+		`find $(PROJECT_NAME) -name \*.html` `find $(PROJECT_NAME) -name \*.js`
 else
 	@echo "Unsupported"
 endif
@@ -316,18 +365,29 @@ usage:
 make:
 	git add base.mk
 	git add Makefile
-#
-deploy-default:
-	eb deploy
+
 .PHONY: d
-d: deploy
+d: eb-deploy
+
+# https://stackoverflow.com/a/589260/185820
+UNAME := $(shell uname)
+
 #
 # MySQL
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
 #
 my-init-default:
-	-mysqladmin -u root drop $(PROJECT)
-	-mysqladmin -u root create $(PROJECT)
+	-mysqladmin -u root drop $(PROJECT_NAME)
+	-mysqladmin -u root create $(PROJECT_NAME)
+
+#
+# Pipenv
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+#
+pip-env-lock-default:
+	pipenv lock
+pip-env-install-default:
+	pipenv install
 #
 # Pip
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
@@ -335,7 +395,7 @@ my-init-default:
 pip-freeze-default:
 	pip freeze | sort > $(TMPDIR)/requirements.txt
 	mv -f $(TMPDIR)/requirements.txt .
-pip-install-default: pip-up
+pip-install-default: pip-upgrade
 	pip install wheel
 	pip install -r requirements.txt
 pip-install-test:
@@ -352,30 +412,46 @@ pip-install-sphinx:
 	-git add requirements.txt
 pip-install-wagtail:
 	pip install dj-database-url psycopg2-binary whitenoise wagtail python-webpack-boilerplate
-pip-install-upgrade:
+pip-install-upgrade-default:
 	cat requirements.txt | awk -F \= '{print $$1}' > $(TMPDIR)/requirements.txt
 	mv -f $(TMPDIR)/requirements.txt .
 	pip install -U -r requirements.txt
 	$(MAKE) pip-freeze
-pip-up:
+pip-upgrade:
 	pip install -U pip
 pip-init:
 	touch requirements.txt
 	-git add requirements.txt
 .PHONY: freeze
 freeze: pip-freeze
+.PHONY: pip-up
+pip-up: pip-upgrade
+.PHONY: lock
+lock: pip-lock
 install-default: pip-install
 install-test-default: pip-install-test
+
+# https://stackoverflow.com/a/589260/185820
+TMPDIR := $(shell mktemp -d)
+
 #
 # PostgreSQL
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
 #
 pg-init-default:
-	-dropdb $(PROJECT)
-	-createdb $(PROJECT)
+	-dropdb $(PROJECT_NAME)
+	-createdb $(PROJECT_NAME)
 
 .PHONY: db-init
 db-init: pg-init
+
+#
+# Project Makefile
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+#
+
+dev:
+	python setup.py develop
 
 #
 # Python
@@ -383,16 +459,16 @@ db-init: pg-init
 #
 black-default:
 	-black *.py
-	-black $(PROJECT)/*.py
-	-black $(PROJECT)/*/*.py
+	-black $(PROJECT_NAME)/*.py
+	-black $(PROJECT_NAME)/*/*.py
 isort-default:
 	-isort *.py
-	-isort $(PROJECT)/*.py
-	-isort $(PROJECT)/*/*.py
+	-isort $(PROJECT_NAME)/*.py
+	-isort $(PROJECT_NAME)/*/*.py
 flake-default:
 	-flake8 *.py
-	-flake8 $(PROJECT)/*.py
-	-flake8 $(PROJECT)/*/*.py
+	-flake8 $(PROJECT_NAME)/*.py
+	-flake8 $(PROJECT_NAME)/*/*.py
 python-serve-default:
 	@echo "\n\tServing HTTP on http://0.0.0.0:8000\n"
 	python -m http.server
@@ -408,6 +484,8 @@ python-virtualenv-3-9-default:
 virtualenv: python-virtualenv-3-8
 .PHONY: v
 v: virtualenv
+.PHONY: venv
+venv: virtualenv
 #
 # Sphinx
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
@@ -416,39 +494,39 @@ sphinx-build-default:
 	sphinx-build -b html -d _build/doctrees . _build/html
 sphinx-init:
 	$(MAKE) pip-install-sphinx
-	sphinx-quickstart -q -p $(PROJECT) -a $(USER) -v 0.0.1 $(RANDIR)
+	sphinx-quickstart -q -p $(PROJECT_NAME) -a $(USER) -v 0.0.1 $(RANDIR)
 	mv $(RANDIR)/* .
 	rmdir $(RANDIR)
 sphinx-serve-default:
 	cd _build/html;python -m http.server
+
+# https://stackoverflow.com/a/589260/185820
+RANDIR := $(shell openssl rand -base64 12 | sed 's/\///g')
+
 #
-# Vagrant
+# Tidelift
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
 #
-vagrant-init:
-	vagrant init ubuntu/bionic64
-	git add Vagrantfile
-	$(MAKE) vagrant-up
-vagrant-up:
-	vagrant up --provider virtualbox
-.PHONY: vagrant
-vagrant: vagrant-init
-.PHONY: vm
-vm: vagrant-init
-vm-up: vagrant-up
+
+tidelift-align-default:
+	tidelift alignment --debug
+tidelift-align-save-default:
+	tidelift alignment save --debug
+tidelift-request-all-default:
+	tidelift request --all --debug
 
 #
 # Wagtail
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
 #
 wagtail-project:
-	wagtail start $(PROJECT) .
+	wagtail start $(PROJECT_NAME) .
 wagtail-init:
 	@$(MAKE) pip-install-wagtail
 	@$(MAKE) pg-init
 	@$(MAKE) wagtail-project
 	export SETTINGS=settings/base.py; $(MAKE) django-settings
-	git add $(PROJECT)
+	git add $(PROJECT_NAME)
 	git add requirements.txt
 	git add manage.py
 	git add Dockerfile
@@ -469,7 +547,7 @@ wagtail-init-hub:
 	@$(MAKE) wagtail-init
 	@$(MAKE) make
 	@$(MAKE) readme
-	@$(MAKE) git-ignore
+	@$(MAKE) gitignore
 	git commit -m "wagtail-init by project-makefile"
 	@$(MAKE) git-set-upstream
 	@$(MAKE) git-push
@@ -518,12 +596,6 @@ endef
 export HOME_PAGE
 wagtail-home:
 	@echo "$$HOME_PAGE" > home/templates/home/home_page.html
-
-.PHONY: all
-all-default: list-targets-default
-
-.PHONY: clean
-clean: list-targets-default
 
 # Overrides
 # ------------------------------------------------------------------------------  

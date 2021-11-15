@@ -74,3 +74,6 @@ edit:
 
 .PHONY: e
 e: edit
+
+eb-deploy:
+	$(MAKE) deploy-dev
