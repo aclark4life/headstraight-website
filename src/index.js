@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import './cover.css';
+import './cover.css';
 import './toolkit-bold.scss';
 import './toolkit-bold.css';
 

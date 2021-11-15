@@ -27,16 +27,8 @@
         <div>
           <h3 class="float-md-start mb-0"><a href="/"><img src="logo_NotoSans-Regular.png"></a></h3>
           <nav class="nav nav-masthead justify-content-center float-md-end">
-            <a class="nav-link active" target="_blank" href="https://www.patreon.com/headstraight">Patreon</a>
-            <!-- https://stackoverflow.com/a/15766254/185820 -->
-            <a href="http://eepurl.com/hH8Je9"
-               class="nav-link active" aria-current="page"
-               onclick="window.open(
-                            'http://eepurl.com/hH8Je9',
-                            'newwindow',
-                            'width=600,height=600');
-                        return false;"
-            >Newsletter</a>
+            <a class="nav-link active" href="#signup">Newsletter</a>
+            <a class="nav-link active" href="#pricing">Patreon</a>
             <a target="_blank" class="nav-link active" aria-current="page" href="https://headstraight.bandcamp.com">Buy/Stream</a>
           </nav>
         </div>
@@ -143,13 +135,12 @@
                 <div class="col-md-7 col-lg-5">
                   <h1 class="block-title mb-4">
                     <span class="text-ribbon text-ribbon-primary">
-                      <span>Hand Picked.</span>
+                      <span>Buy/Stream</span>
                     </span>
                   </h1>
                   <p class="lead">
                     <span class="text-ribbon text-ribbon-primary">
                       <span>
-                        Every album, song, and video we leak is the very best in class.
                       </span>
                     </span>
                   </p>
@@ -200,7 +191,8 @@
           <div class="block-bg-clip">
             <div class="block-bg">
               <div class="block-bg-img block-bg-img-top"
-                   style="background-image: url(../assets/img/mosdef.jpg)">
+                   style="background-image: url(../assets/img/mosdef.jpg)"
+                   id="signup">
               </div>
             </div>
           </div>
@@ -211,18 +203,18 @@
                 <div class="col-md-7 col-lg-6">
                   <h1 class="block-title mb-4">
                     <span class="text-ribbon text-ribbon-primary">
-                      <span>Sign up now.</span>
+                      <!-- https://stackoverflow.com/a/15766254/185820 -->
+                      <a href="http://eepurl.com/hH8Je9"
+                         class="nav-link active text-decoration-none" aria-current="page"
+                         onclick="window.open(
+                                      'http://eepurl.com/hH8Je9',
+                                      'newwindow',
+                                      'width=600,height=600');
+                                  return false;"
+                      >Sign up now</a>
                     </span>
                   </h1>
       
-                  <div class="text-ribbon-inputs-split">
-                    <input type="text" class="h4 text-ribbon-input text-ribbon-primary" placeholder="Name">
-                    <input type="text" class="h4 text-ribbon-input text-ribbon-primary" placeholder="Email">
-                  </div>
-                  <input type="text" class="h4 text-ribbon-input text-ribbon-input-half text-ribbon-primary" placeholder="Promo code">
-                  <button type="button" class="btn btn-square btn-primary btn-lg btn-block">
-                    Get the beta early
-                  </button>
                 </div>
               </div>
             </div>
@@ -238,12 +230,12 @@
                 <div class="col-lg-5">
                   <h1 class="block-title mb-4">
                     <span class="text-ribbon">
-                      <span>Easy Pricing.</span>
-                    </span></h1>
+                      <span>Select a membership level</span>
+                    </span>
+                  </h1>
                   <p class="lead">
                     <span class="text-ribbon text-muted">
                       <span>
-                        One yearly payment of $99 and get unlimited leaked tracks.
                       </span>
                     </span>
                   </p>
