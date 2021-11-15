@@ -68,3 +68,9 @@ pack:
 
 django-npm-install:
 	npm install
+
+edit:
+	vi index.html
+
+.PHONY: e
+e: edit
