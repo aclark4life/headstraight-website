@@ -1,5 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './cover.css';
+// import './cover.css';
+import './toolkit-bold.scss';
 
 // https://stackoverflow.com/a/53580347/185820
 import '@fortawesome/fontawesome-free/js/fontawesome'
