@@ -16,11 +16,53 @@
         a {
             color: black;
         }
+
+ /* Style the video: 100% width and height to cover the entire window */
+#myVideo {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+/* Add some content at the bottom of the video/page */
+.content {
+  position: fixed;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  color: #f1f1f1;
+  width: 100%;
+  padding: 20px;
+}
+
+/* Style the button used to pause/play the video */
+#myBtn {
+  width: 200px;
+  font-size: 18px;
+  padding: 10px;
+  border: none;
+  background: #000;
+  color: #fff;
+  cursor: pointer;
+}
+
+#myBtn:hover {
+  background: #ddd;
+  color: black;
+} 
     </style>
     
   </head>
 
   <body class="d-flex w-100 h-100 text-center text-white bg-dark">
+
+<!-- https://www.w3schools.com/howto/howto_css_fullscreen_video.asp -->
+
+ <!-- The video -->
+<video autoplay muted loop id="myVideo">
+  <source src="video.m4v" type="video/mp4">
+</video>
 
     <div class="cover-container d-flex w-100 h-100 mx-auto flex-column">
       <header class="mb-auto fixed-top">
@@ -45,8 +87,7 @@
   
       <div class="stage" id="stage">
       
-        <div class="block block-fill-height app-block-wayne"
-             style="background-image: url(../assets/img/lilwayne.jpg); background-position: top">
+        <div class="block-fill-height" >
       
           <div class="block-sm-middle block-xs-bottom">
             <div class="container">
@@ -273,6 +314,25 @@ For those of us fortunate enough to be alive after the pandemic, there is a new 
       gtag('js', new Date());
     
       gtag('config', 'UA-171017300-1');
+
+
+
+// Get the video
+var video = document.getElementById("myVideo");
+
+// Get the button
+var btn = document.getElementById("myBtn");
+
+// Pause and play the video, and change the button text
+function myFunction() {
+  if (video.paused) {
+    video.play();
+    btn.innerHTML = "Pause";
+  } else {
+    video.pause();
+    btn.innerHTML = "Play";
+  }
+}
     </script>
   </body>
 </html>
