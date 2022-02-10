@@ -1,92 +1,431 @@
-<!doctype html>
-<html lang="en" class="h-100">
+<!DOCTYPE html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <title>Headstraight • Home</title>
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+
+    <title>
+
+      Headstraight
+
+    </title>
+
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,400italic|Roboto:100,300,400,700" rel="stylesheet">
+    <link href="../assets/css/toolkit-bold.css" rel="stylesheet">
+    <link href="../assets/css/application-bold.css" rel="stylesheet">
+
     <style>
-        html, body { 
-            background: black;
-        }
-        a {
-            color: black;
-        }
+      /* Style the video: 100% width and height to cover the entire window */
+      #myVideo {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        min-width: 100%;
+        min-height: 100%;
+      }
+      /* Add some content at the bottom of the video/page */
+      .content {
+        position: fixed;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        color: #f1f1f1;
+        width: 100%;
+        padding: 20px;
+      }
+
+      /* Style the button used to pause/play the video */
+      #myBtn {
+        width: 200px;
+        font-size: 18px;
+        padding: 10px;
+        border: none;
+        background: #000;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      #myBtn:hover {
+        background: #ddd;
+        color: black;
+      } 
     </style>
   </head>
 
-  <body class="d-flex h-100 text-center text-white bg-dark">
-    
-    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-      <header class="mb-auto">
-        <div>
-          <h3 class="float-md-start mb-0"><a href="/"><img src="logo_NotoSans-Regular.png"></a></h3>
-          <nav class="nav nav-masthead justify-content-center float-md-end">
-            <!-- <a class="nav-link active" href="/music-makers-seek-tunes.html">Music Makers! Seek Tunes!</a> -->
-            <a class="nav-link active" target="_blank" href="https://www.patreon.com/headstraight">Patreon</a>
-            <!-- https://stackoverflow.com/a/15766254/185820 -->
-            <a href="http://eepurl.com/hH8Je9"
-               class="nav-link active" aria-current="page"
-               onclick="window.open(
-                            'http://eepurl.com/hH8Je9',
-                            'newwindow',
-                            'width=600,height=600');
-                        return false;"
-            >Newsletter</a>
-            <a target="_blank" class="nav-link active" aria-current="page" href="https://headstraight.bandcamp.com">Buy/Stream</a>
-          </nav>
-        </div>
-      </header>
+<body>
 
-    <!--
-      <main class="px-3">
-        <h1>Cover your page.</h1>
-        <p class="lead">Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background photo to make it your own.</p>
-        <p class="lead">
-          <a href="#" class="btn btn-lg btn-secondary fw-bold border-white bg-white">Learn more</a>
-        </p>
-      </main>
-    -->
+<!-- https://www.w3schools.com/howto/howto_css_fullscreen_video.asp -->
+<!-- The video -->
 
-      <footer class="d-none d-lg-flex mt-auto justify-content-between text-white-50">
-        <ul class="list-inline">
-          <a class="text-white mx-1" aria-current="page" href="https://facebook.com/headstraightband" target="_blank"><i class="fab fa-facebook fa-2x"></i></a>
-          <a class="text-white mx-1" aria-current="page" href="https://instagram.com/headstraightband" target="_blank"><i class="fab fa-instagram fa-2x"></i></a>
-          <a class="text-white mx-1" aria-current="page" href="https://twitter.com/_headstraight" target="_blank"><i class="fab fa-twitter fa-2x"></i></a>
-          <a class="text-white mx-1" aria-current="page" href="https://youtube.com/aclark4life" target="_blank"><i class="fab fa-youtube fa-2x"></i></a>
-        </ul>
-        <div> 
-          <iframe style="border: 0; width: 300px; height: 42px;" src="https://bandcamp.com/EmbeddedPlayer/album=4115076605/size=small/bgcol=333333/linkcol=ffffff/transparent=true/" seamless><a href="https://headstraight.bandcamp.com/album/buried">Buried by Headstraight</a></iframe>
-          <iframe style="border: 0; width: 300px; height: 42px;" src="https://bandcamp.com/EmbeddedPlayer/album=3090539290/size=small/bgcol=333333/linkcol=ffffff/transparent=true/" seamless><a href="https://headstraight.bandcamp.com/album/good-nature">Good Nature by Headstraight</a></iframe>
-        </div>
-        <p class="text-white pt-2">&copy; 2021 Headstraight</p>
-      </footer>
+<video autoplay muted loop id="myVideo">
+  <source src="video.mov" type="video/mp4">
+</video>
 
-      <footer class="d-lg-none d-sm-flex flex-column mt-auto justify-content-between text-white-50">
-        <div> 
-          <iframe style="border: 0; width: 300px; height: 42px;" src="https://bandcamp.com/EmbeddedPlayer/album=4115076605/size=small/bgcol=333333/linkcol=ffffff/transparent=true/" seamless><a href="https://headstraight.bandcamp.com/album/buried">Buried by Headstraight</a></iframe>
-          <iframe style="border: 0; width: 300px; height: 42px;" src="https://bandcamp.com/EmbeddedPlayer/album=3090539290/size=small/bgcol=333333/linkcol=ffffff/transparent=true/" seamless><a href="https://headstraight.bandcamp.com/album/good-nature">Good Nature by Headstraight</a></iframe>
+<div class="stage" id="stage">
+
+  <nav class="navbar fixed-top navbar-light bg-transparent mr-3">
+    <a class="navbar-brand" href="/"><img src="assets/img/logo-circle-white.png"></a>
+    <nav class="nav nav-masthead justify-content-center float-md-end mt-md-3">
+      <a class="mx-2" href="https://facebook.com/headstraightband" target="_blank"><i class="fab fa-facebook fa-2x"></i></a>
+      <a class="mx-2" href="https://instagram.com/headstraightband" target="_blank"><i class="fab fa-instagram fa-2x"></i></a>
+      <a class="mx-2" href="https://twitter.com/_headstraight" target="_blank"><i class="fab fa-twitter fa-2x"></i></a>
+      <a class="mx-2" href="https://youtube.com/aclark4life" target="_blank"><i class="fab fa-youtube fa-2x"></i></a>
+    </nav>
+  </nav>
+
+  <div class="block block-fill-height app-block-wayne pb-5">
+
+    <div class="block-sm-bottom block-xs-bottom">
+      <div class="container">
+        <div class="row pb-5">
+          <div class="col-lg-5 pb-5">
+            <h1 class="block-title mb-4">
+              <span class="text-ribbon text-ribbon-primary">
+                <span>Headstraight</span>
+              </span>
+            </h1>
+            <p class="lead">
+              <span class="text-ribbon text-ribbon-primary">
+                <span>
+                  Rock band from Bethesda, MD, USA.
+                </span>
+              </span>
+            </p>
+          </div>
         </div>
-        <div class="d-flex justify-content-center">
-          <ul class="list-inline">
-            <a class="text-white mx-1" aria-current="page" href="https://facebook.com/headstraightband" target="_blank"><i class="fab fa-facebook fa-2x"></i></a>
-            <a class="text-white mx-1" aria-current="page" href="https://instagram.com/headstraightband" target="_blank"><i class="fab fa-instagram fa-2x"></i></a>
-            <a class="text-white mx-1" aria-current="page" href="https://twitter.com/_headstraight" target="_blank"><i class="fab fa-twitter fa-2x"></i></a>
-            <a class="text-white mx-1" aria-current="page" href="https://youtube.com/aclark4life" target="_blank"><i class="fab fa-youtube fa-2x"></i></a>
-          </ul>
-          <p class="text-white mt-2 ms-2">&copy; 2021 Headstraight</p>
+        <div class="row text-center pt-5">
+          <div class="col-lg-3 offset-lg-3">
+            <a class="block-title btn btn-lg text-dark p-3" href="https://songwhip.com/headstraight" target="_blank">
+              <span class="text-ribbon text-ribbon-primary text-uppercase p-3">
+                <span>Buy/Stream Music</span>
+              </span>
+            </a>
+          </div>
+          <div class="col-lg-3">
+            <a class="block-title btn btn-lg text-dark p-3" href="https://www.patreon.com/join/headstraight" target="_blank">
+              <span class="text-ribbon text-ribbon-primary text-uppercase p-3">
+                <span>Become a patron</span>
+              </span>
+            </a>
+          </div>
         </div>
-      </footer>
+      </div>
     </div>
-    <script src="dist/bundle.js"></script>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171017300-1"></script>
+  </div>
+
+
+  <div class="block block-inverse block-transparent py-0 app-block-grid">
+
+    <div class="block-bg-clip">
+      <div class="block-bg">
+        <div class="block-bg-img"></div>
+      </div>
+    </div>
+
+
+    <div class="container" id="grid">
+      <div class="row">
+        <div class="col-lg-4 col-md-6">
+          <div class="row mb-3 mb-md-4">
+            <div class="col-lg-12">
+              <div class="card card-bold card-danger mb-0 app-box-shadow">
+                <img src="../assets/img/azalea.jpg">
+                <div class="card-body pb-5">
+                  <h4 class="mb-0">Alex Clark</h4>
+                  <p class="text-serif"><em>Multi-instrumentalist</em></p>
+                  <hr>
+                  <p class="text-serif"><em>Headstraight founder</em></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row d-none d-lg-block">
+            <div class="col-lg-12">
+              <img src="../assets/img/minaj.jpg">
+           </div>
+          </div>
+        </div>
+        <div class="col-lg-8 col-md-6">
+          <div class="row">
+            <div class="col-lg-6 mb-3 mb-md-4">
+              <div class="app-box-shadow">
+                <img src="../assets/img/childish.jpg">
+              </div>
+            </div>
+            <div class="col-lg-6 mb-3 mb-md-4">
+              <div class="app-box-shadow">
+                <img src="../assets/img/yeezus.jpg">
+              </div>
+            </div>
+          </div>
+          <div class="row d-none d-lg-block">
+            <div class="col-lg-12">
+              <img src="../assets/img/cudi.jpg">
+           </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-fill-height block-transparent block-angle app-block-chainz" id="chainz">
+
+    <div class="block-bg-clip">
+      <div class="block-bg">
+        <div class="block-bg-img block-bg-img-top"
+             style="background-image: url(../assets/img/2chainz.jpg)">
+        </div>
+      </div>
+    </div>
+
+    <div class="block-sm-middle block-xs-top">
+      <div class="container">
+        <div class="row justify-content-end">
+          <div class="col-md-9 col-lg-7">
+            <h1 class="block-title mb-4">
+              <span class="text-ribbon text-ribbon-primary">
+                <span>Innocent</span>
+              </span>
+            </h1>
+            <p class="lead">
+              <span class="text-ribbon text-ribbon-primary">
+                <span>
+                &quot;Innocent. Leave me alone. Let me watch re-runs. Let me analyze them.&quot;
+                </span>
+              </span>
+            </p>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/8SHL4WPssuA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-fill-height block-transparent block-inverse block-angle app-block-kanye">
+    <div class="block-bg-clip">
+      <div class="block-bg">
+        <div class="block-bg-img block-bg-img-top"
+             style="background-image: url(../assets/img/kanye.jpg)">
+        </div>
+      </div>
+    </div>
+
+    <div class="block-xs-middle">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-7 col-lg-5">
+            <h1 class="block-title mb-4">
+              <span class="text-ribbon">
+                <span>Buried</span>
+              </span>
+            </h1>
+            <p class="lead">
+              <span class="text-ribbon">
+                <span>
+                &quot;I can see that where you are don't involve me we're so far…"&quot;
+                </span>
+              </span>
+            </p>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-8">
+            <div class="embed-responsive embed-responsive-16by9">
+              <iframe width="560" height="315" src="https://www.youtube.com/embed/KSdTfygcAiI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-transparent block-fill-height block-angle block-app-mosdef">
+    <div class="block-bg-clip">
+      <div class="block-bg">
+        <div class="block-bg-img block-bg-img-top"
+             style="background-image: url(../assets/img/mosdef.jpg)">
+        </div>
+      </div>
+    </div>
+
+    <div class="block-xs-middle">
+      <div class="container">
+        <div class="row justify-content-end">
+          <div class="col-md-9 col-lg-7">
+            <h1 class="block-title mb-4">
+              <span class="text-ribbon text-ribbon-primary">
+                <span>Good Nature</span>
+              </span>
+            </h1>
+            <p class="lead">
+              <span class="text-ribbon text-ribbon-primary">
+                <span>
+                &quot;Hey not so fast with your good looks and your good nature&#8230;&quot;
+                </span>
+              </span>
+            </p>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/vagQrnaOV7c" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-fill-height block-inverse app-block-nicki"
+       style="background-image: url(../assets/img/nicki.jpg)"
+       id="pricing">
+    <div class="block-xs-middle">
+      <div class="container">
+        <div class="row mb-4">
+          <div class="col-lg-5">
+            <h1 class="block-title mb-4">
+              <span class="text-ribbon">
+                <span>See You Again</span>
+              </span></h1>
+            <p class="lead">
+              <span class="text-ribbon text-muted">
+                <span>
+                  &quot;I know where you are. It's not very far. I will take a train. To see you again&#8230;&quot;
+                </span>
+              </span>
+            </p>
+          </div>
+        </div>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/r28COTXUDC0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-inverse accent-primary" id="footer">
+    <div class="container">
+      <div class="row text-serif">
+        <div class="col-md-6 mb-4">
+          <ul class="list-unstyled list-spaced">
+            <li><h4>Press</h4></li>
+            <li class="text-muted"><em><!-- Button trigger modal --><a type="button" class="btn p-0 m-0" data-toggle="modal" data-target="#musicmonthlyModal">Music Monthly</a></em></li>
+            <li class="text-muted"><em><!-- Button trigger modal --><a type="button" class="btn p-0 m-0" data-toggle="modal" data-target="#nextdoornewsModal">Next Door News</a></em></li>
+          </ul>
+        </div>
+        <div class="col-md-6 mb-4">
+          <ul class="list-unstyled list-spaced">
+            <li><h4>Photography</h4></li>
+            <li class="text-muted">
+              <em>Background photos: Allison Nugent, <a href="https://www.facebook.com/people/Bo-Tree-Photography/100042171412574/" target="_blank">Bo Tree Photography</a>.</em>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row text-serif">
+        <div class="col-md-6 my-4">
+          <ul class="list-unstyled list-spaced">
+            <li><em class="text-muted">&copy;2022 Jeffrey A. Clark, "Alex". All Rights Reserved.</em></li>
+          </ul>
+        </div>
+        <div class="col-md-4 my-4">
+          <a class="ms-5 me-3" aria-current="page" href="https://facebook.com/headstraightband" target="_blank"><i class="fab fa-facebook fa-2x"></i></a>
+          <a class="mx-3" aria-current="page" href="https://instagram.com/headstraightband" target="_blank"><i class="fab fa-instagram fa-2x"></i></a>
+          <a class="mx-3" aria-current="page" href="https://twitter.com/_headstraight" target="_blank"><i class="fab fa-twitter fa-2x"></i></a>
+          <a class="mx-3" aria-current="page" href="https://youtube.com/aclark4life" target="_blank"><i class="fab fa-youtube fa-2x"></i></a>
+        </div>
+        <div class="col-md-2 my-4">
+          <a href="#"><i class="far fa-arrow-alt-circle-up fa-2x"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="musicmonthlyModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Music Monthly</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h3>Excerpt from Music Monthly</h3>
+        <h5>October, 2004 Vol. 21, No. 10 Issue #241</h5> 
+        <h3>Grab Bag</h3>
+        <h5>By Greg Yost</h5>
+        <p class="lead">Power pop is a style of music that doesn't seem very prevalent in the Baltimore and Washington, D.C. region, but I discovered two local bands working hard to fill that void. Both Ape House and Headstraight are carrying the power pop torch in the region with their great music...</p>
+        <p class="lead">...Baltimore's Headstraight has a slightly darker sound than Ape House, but the power pop formula is still evident. The band just put out an EP called <i>Buried</i> to showcase its sound and the three tracks are very impressive. Of particular note is the grungy "Not Enough." This song sounds like it was pulled from Soundgarden's material from the early 90's.... Both bands are making great music and are worth checking out....</p>
+        </blockquote>
+              </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="nextdoornewsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Next Door News</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h3>Excerpt from Next Door News</h3>
+        <h5>VOL. 1, ISSUE3 | JULY2006</h5>
+        <h5>NEXT DOOR CULTURE</h5>
+        <h5>NEIGHBORHOOD PERFORMANCE</h5>
+        <h5>Alex Clark of McKinley Street founded local band Headstraight</h5>
+        <p class="lead">Being in a band might seem glamorous, but according to Alex Clark, it's a lot of hard work. Not only is Alex the founding member of Headstraight, he's also the band's lead vocalist, songwriter and publicist. Alex always loved music, but he didn't start playing guitar until high school. He cites the band Nirvana as a major influence. "I wanted to travel and tour the country with my music, like they did," he says. When he graduated college with a computer science degree in 1998, Alex decided it was time to give his dream a try. After 3 years of ups and downs in Baltimore, Alex moved to Bethesda, where Headstraight was eventually formed. Their music is a mix of rock and pop, but Alex categorizes the band as having an Alternative Rock sound. Currently, Alex freelances developing software, which allows him to concentrate his efforts on the band's future. "I feel like we're making progress and building momentum," he says. Headstraight's first album is due out the end of July, and the band will promote its release by broadcasting to 300 college radio stations. You can
+        catch Headstraight on July 11 at TT Reynolds in Fairfax, VA.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/popper.min.js"></script>
+    <script src="../assets/js/toolkit.js"></script>
+    <script src="../assets/js/application.js"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-    
-      gtag('config', 'UA-171017300-1');
+      // execute/clear BS loaders for docs
+      $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
     </script>
-  </body>
+
+    <script>
+    // Get the video
+    var video = document.getElementById("myVideo");
+
+    // Get the button
+    var btn = document.getElementById("myBtn");
+
+    // Pause and play the video, and change the button text
+    function myFunction() {
+      if (video.paused) {
+        video.play();
+        btn.innerHTML = "Pause";
+      } else {
+        video.pause();
+        btn.innerHTML = "Play";
+      }
+    }
+    </script>
+    <script src="https://kit.fontawesome.com/b99cce5dfd.js" crossorigin="anonymous"></script>
+</body>
 </html>
+
