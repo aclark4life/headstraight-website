@@ -77,4 +77,4 @@ edit:
 e: edit
 
 eb-deploy:
-	$(MAKE) deploy-dev
+	$(MAKE) deploy-prod
